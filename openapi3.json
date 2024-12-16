@@ -1,0 +1,577 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "core-card-account-block-v1",
+    "description": "Api and Models",
+    "termsOfService": "Darwin=YES WSRR=SYNCINSBLK ACRO=CARP0",
+    "version": "1.0.0-SNAPSHOT (d8ea25c5921527e231ba41c53ade84c79674d4bc)"
+  },
+  "servers": [
+    {
+      "url": "http://core-card-account-block-v1-carp0-svil.cloudapps-test.intesasanpaolo.com",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Account Block",
+      "description": "Endpoints to manage block on a vault account"
+    }
+  ],
+  "paths": {
+    "/account/block": {
+      "put": {
+        "tags": [
+          "Account Block"
+        ],
+        "summary": "Insert block on a Vault account",
+        "operationId": "insertBlock",
+        "parameters": [
+          {
+            "name": "ISPWebservicesHeader.TechnicalInfo.ChannelIDCode",
+            "in": "header",
+            "description": "Channel id",
+            "required": true,
+            "schema": {
+              "maxLength": 3,
+              "minLength": 2,
+              "type": "string"
+            },
+            "example": "02"
+          }
+        ],
+        "requestBody": {
+          "description": "Block to insert",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountBlockRequestResource"
+              },
+              "example": {
+                "account": {
+                  "abiAccount": "01025",
+                  "branchAccount": "00700",
+                  "categoryAccount": "1000",
+                  "numberAccount": "00000001"
+                },
+                "clientTransactionId": "01INTER20240101ZEPSH000000001",
+                "accountingReason": "0QH",
+                "amount": 10,
+                "sign": "DARE"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/ErrorResource"
+                  }
+                },
+                "example": {
+                  "returnMessages": {
+                    "ERROR": [
+                      {
+                        "message": "The field 'accountingReason' is required [regexp = '^[A-Z0-9]{3}$']",
+                        "messageTitle": "Validation error",
+                        "messageKey": "accountblockcontroller.insertblock.accountblockrequestresource.accountingreason.size",
+                        "retry": false,
+                        "errorCode": "ERRVAL103-2",
+                        "messagesForm": [],
+                        "extensions": {
+
+                        },
+                        "severity": "ERROR"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/ErrorResource"
+                  }
+                },
+                "example": {
+                  "returnMessages": {
+                    "ERROR": [
+                      {
+                        "message": "Insert block rejected",
+                        "messageTitle": "Business logic error",
+                        "messageKey": "rejected.insert.block",
+                        "retry": false,
+                        "errorCode": "ERR002",
+                        "messagesForm": [],
+                        "extensions": {
+
+                        },
+                        "severity": "ERROR"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/ErrorResource"
+                  }
+                },
+                "example": {
+                  "returnMessages": {
+                    "ERROR": [
+                      {
+                        "message": "Unsupported media type",
+                        "messageTitle": "Unsupported media type",
+                        "messageKey": "unsupported.media.type.error",
+                        "retry": false,
+                        "errorCode": "ERR415",
+                        "messagesForm": [],
+                        "extensions": {
+
+                        },
+                        "severity": "ERROR"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Unsupported method error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/ErrorResource"
+                  }
+                },
+                "example": {
+                  "returnMessages": {
+                    "ERROR": [
+                      {
+                        "message": "Unsupported method error",
+                        "messageTitle": "Unsupported method error",
+                        "messageKey": "unsupported.method.error",
+                        "retry": false,
+                        "errorCode": "ERR405",
+                        "messagesForm": [],
+                        "extensions": {
+
+                        },
+                        "severity": "ERROR"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/ErrorResource"
+                  }
+                },
+                "example": {
+                  "returnMessages": {
+                    "ERROR": [
+                      {
+                        "message": "...",
+                        "messageTitle": "External error",
+                        "messageKey": "external.error",
+                        "retry": false,
+                        "errorCode": "EXTERR",
+                        "messagesForm": [],
+                        "extensions": {
+
+                        },
+                        "severity": "ERROR"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Availability block inserted on Vault",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/AccountBlockResponseResource"
+                  }
+                },
+                "example": {
+                  "account": {
+                    "abiAccount": "01025",
+                    "branchAccount": "00700",
+                    "categoryAccount": "1000",
+                    "numberAccount": "00000001"
+                  },
+                  "clientTransactionId": "01INTER20240101ZEPSH000000001",
+                  "accountingReason": "0QH",
+                  "amount": 10,
+                  "sign": "DARE",
+                  "kope": "01CARP020240101ZE006000000001"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "timestamp": "2024-12-12T12:21:34.632+00:00",
+                  "status": 401,
+                  "error": "Unauthorized",
+                  "path": "/account/block"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Request timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/ErrorResource"
+                  }
+                },
+                "example": {
+                  "returnMessages": {
+                    "ERROR": [
+                      {
+                        "message": "Exceeded number of retry to get the vault result",
+                        "messageTitle": "Business logic error",
+                        "messageKey": "exceed.retry.number",
+                        "retry": true,
+                        "errorCode": "ERR001",
+                        "messagesForm": [],
+                        "extensions": {
+
+                        },
+                        "severity": "ERROR"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer Authentication": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "messageTitle": {
+            "type": "string"
+          },
+          "messageKey": {
+            "type": "string"
+          },
+          "retry": {
+            "type": "boolean"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "messagesForm": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageForm"
+            }
+          },
+          "extensions": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "severity": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "messageForm": {
+            "$ref": "#/components/schemas/MessageForm"
+          }
+        }
+      },
+      "ErrorResource": {
+        "type": "object",
+        "properties": {
+          "returnMessages": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ErrorMessage"
+              }
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/Link"
+        }
+      },
+      "MessageForm": {
+        "type": "object",
+        "properties": {
+          "formName": {
+            "type": "string"
+          },
+          "fieldName": {
+            "type": "string"
+          }
+        }
+      },
+      "Account": {
+        "required": [
+          "abiAccount",
+          "branchAccount",
+          "categoryAccount",
+          "numberAccount"
+        ],
+        "type": "object",
+        "properties": {
+          "abiAccount": {
+            "maxLength": 5,
+            "minLength": 5,
+            "type": "string"
+          },
+          "branchAccount": {
+            "maxLength": 5,
+            "minLength": 5,
+            "type": "string"
+          },
+          "categoryAccount": {
+            "maxLength": 4,
+            "minLength": 4,
+            "type": "string"
+          },
+          "numberAccount": {
+            "maxLength": 8,
+            "minLength": 8,
+            "type": "string"
+          }
+        }
+      },
+      "AccountBlockRequestResource": {
+        "required": [
+          "account",
+          "accountingReason",
+          "amount",
+          "clientTransactionId",
+          "sign"
+        ],
+        "type": "object",
+        "properties": {
+          "returnMessages": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ErrorMessage"
+              }
+            }
+          },
+          "account": {
+            "$ref": "#/components/schemas/Account"
+          },
+          "clientTransactionId": {
+            "maxLength": 29,
+            "minLength": 29,
+            "type": "string"
+          },
+          "accountingReason": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "amount": {
+            "maximum": 9999999.99,
+            "exclusiveMaximum": false,
+            "minimum": 0.01,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "denomination": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "sign": {
+            "type": "string",
+            "enum": [
+              "DARE",
+              "AVERE"
+            ]
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "AccountBlockResponseResource": {
+        "required": [
+          "account",
+          "accountingReason",
+          "amount",
+          "clientTransactionId",
+          "kope",
+          "sign"
+        ],
+        "type": "object",
+        "properties": {
+          "returnMessages": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ErrorMessage"
+              }
+            }
+          },
+          "account": {
+            "$ref": "#/components/schemas/Account"
+          },
+          "clientTransactionId": {
+            "maxLength": 29,
+            "minLength": 29,
+            "type": "string"
+          },
+          "accountingReason": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "amount": {
+            "maximum": 9999999.99,
+            "exclusiveMaximum": false,
+            "minimum": 0.01,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "denomination": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "sign": {
+            "type": "string",
+            "enum": [
+              "DARE",
+              "AVERE"
+            ]
+          },
+          "kope": {
+            "maxLength": 29,
+            "minLength": 29,
+            "type": "string"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string"
+          },
+          "hreflang": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "deprecation": {
+            "type": "string"
+          },
+          "profile": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "templated": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer Authentication": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
